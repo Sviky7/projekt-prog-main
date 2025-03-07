@@ -333,7 +333,7 @@ if __name__ == '__main__':
         db.create_all()
         
         # Add default subjects if they don't exist
-        default_subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science']
+        default_subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science', 'History', 'Geography', 'Economics', 'Business Studies', 'Accounting','Slovak']
         for subject_name in default_subjects:
             if not Subject.query.filter_by(name=subject_name).first():
                 subject = Subject(name=subject_name)
