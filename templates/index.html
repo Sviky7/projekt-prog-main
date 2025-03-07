@@ -85,9 +85,9 @@
             <h2 class="section-title mb-0">Our Tutors</h2>
             <div class="d-flex gap-2">
                 <select class="form-select" id="sort-tutors">
-                    <option value="rating">Highest Rated</option>
-                    <option value="price_asc">Price: Low to High</option>
-                    <option value="price_desc">Price: High to Low</option>
+                    <option value="rating" {% if request.args.get('sort', 'rating') == 'rating' %}selected{% endif %}>Highest Rated</option>
+                    <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
                 </select>
             </div>
         </div>
@@ -177,8 +177,21 @@
 <script>
 document.getElementById('sort-tutors').addEventListener('change', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('sort', this.value);
-    window.location.search = urlParams.toString();
+    const currentSubject = urlParams.get('subject');
+    const currentSearch = urlParams.get('search');
+    
+    // Create new URLSearchParams with only the parameters we want
+    const newParams = new URLSearchParams();
+    
+    // Add sort parameter
+    newParams.set('sort', this.value);
+    
+    // Preserve existing filters if they exist
+    if (currentSubject) newParams.set('subject', currentSubject);
+    if (currentSearch) newParams.set('search', currentSearch);
+    
+    // Update URL with new parameters
+    window.location.search = newParams.toString();
 });
 </script>
 {% endblock %}

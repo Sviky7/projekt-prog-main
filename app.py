@@ -46,6 +46,7 @@ def load_user(id):
 def index():
     subject_id = request.args.get('subject', '')
     search_query = request.args.get('search', '').strip().lower()
+    sort_by = request.args.get('sort', 'rating')  # Default sort by rating
     
     # Start with all tutors
     tutors_query = TutorProfile.query
@@ -63,7 +64,17 @@ def index():
             )
         )
     
+    # Get all tutors before sorting
     tutors = tutors_query.all()
+    
+    # Sort tutors based on selected criteria
+    if sort_by == 'price_asc':
+        tutors.sort(key=lambda x: x.hourly_rate)
+    elif sort_by == 'price_desc':
+        tutors.sort(key=lambda x: x.hourly_rate, reverse=True)
+    else:  # sort by rating (default)
+        tutors.sort(key=lambda x: x.average_rating, reverse=True)
+    
     subjects = Subject.query.all()
     
     # Pre-calculate tutor counts for each subject
