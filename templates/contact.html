@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="container">
+        <h2>Kontaktujte nás</h2>
+        <p>Ak máte akékoľvek otázky alebo potrebujete viac informácií, neváhajte nás kontaktovať.</p>
+        
+        <div class="contact-info">
+            <p><strong>Email:</strong> zochovaspaceagency@gmail.com</p>
+            <p><strong>Telefón:</strong> +421 987 654 321</p>
+            <p><strong>Adresa:</strong> Zochova 10, 811 03 Bratislava, Slovensko</p>
+        </div>
+
+        <form action="{{ url_for('contact') }}" method="post" class="contact-form">
+            <div class="form-group">
+                <label for="name">Meno:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Správa:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Odoslať</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Create Tutor Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Create Your Tutor Profile</h2>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.hourly_rate.label(class="form-label") }}
+                        {{ form.hourly_rate(class="form-control") }}
+                        {% for error in form.hourly_rate.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.bio.label(class="form-label") }}
+                        {{ form.bio(class="form-control", rows=5) }}
+                        {% for error in form.bio.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                        <small class="text-muted">Write a brief description about your teaching experience and expertise.</small>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.subjects.label(class="form-label") }}
+                        {{ form.subjects(class="form-select", multiple=true, size=5) }}
+                        {% for error in form.subjects.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                        <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple subjects.</small>
+                    </div>
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

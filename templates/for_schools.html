@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="for-schools-section py-5">
+    <div class="container">
+        <h2 class="section-title mb-4">For Schools</h2>
+        <p class="mb-4">ZochovaEdu offers a convenient platform for schools to manage tutors, create profiles, and ensure quality educational experiences. Here's how your school can get involved:</p>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <div class="step-card">
+                    <div class="step-icon mb-3">
+                        <i class="fas fa-school fa-3x"></i>
+                    </div>
+                    <h4 class="step-title">1. Sign Up Your School</h4>
+                    <p>Register your school on ZochovaEdu. Provide basic information about your school and the subjects you wish to offer through our platform.</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+                <div class="step-card">
+                    <div class="step-icon mb-3">
+                        <i class="fas fa-user-tie fa-3x"></i>
+                    </div>
+                    <h4 class="step-title">2. Add Tutors</h4>
+                    <p>Once your school is registered, you can add your tutors to the platform. Each tutor can create their own profile to share their expertise and availability.</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+                <div class="step-card">
+                    <div class="step-icon mb-3">
+                        <i class="fas fa-book-open fa-3x"></i>
+                    </div>
+                    <h4 class="step-title">3. Customize Subjects</h4>
+                    <p>Schools can offer a wide range of subjects. Customize your offerings and add specialized subjects based on your school's curriculum to attract more students.</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+                <div class="step-card">
+                    <div class="step-icon mb-3">
+                        <i class="fas fa-calendar-day fa-3x"></i>
+                    </div>
+                    <h4 class="step-title">4. Manage Bookings</h4>
+                    <p>Manage and track tutor bookings through the platform. Allow students to book sessions with your tutors based on their availability and subject expertise.</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+                <div class="step-card">
+                    <div class="step-icon mb-3">
+                        <i class="fas fa-chart-line fa-3x"></i>
+                    </div>
+                    <h4 class="step-title">5. Monitor Progress & Feedback</h4>
+                    <p>Track the progress of students and tutors. Gather feedback from both tutors and students to improve the quality of education your school offers on ZochovaEdu.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('for_schools') }}" class="btn btn-primary btn-lg">Get Started</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Find Your Perfect Tutor{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 mb-5">
+    <img src="https://www.littlelives.org.uk/wp-content/uploads/2023/06/reading-with-children-1-1920x800.jpg" alt="Hero Image" class="hero-img">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Expert Tutoring, On Your Schedule</h1>
+        <p class="lead mb-4 text-white">Choose from our verified tutors and boost your academic success today</p>
+        <div class="search-box bg-white p-3 rounded-pill shadow-lg mx-auto">
+            <form class="d-flex gap-2" method="GET" action="{{ url_for('index') }}">
+                <select class="form-select border-0" name="subject" aria-label="Select subject">
+                    <option value="" selected>All Subjects</option>
+                    {% for item in subject_data %}
+                        <option value="{{ item.id }}" {% if request.args.get('subject')|int == item.id %}selected{% endif %}>
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="text" class="form-control border-0" name="search" 
+                       placeholder="Search tutors..." value="{{ request.args.get('search', '') }}">
+                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Main Content -->
+<div class="container">
+    <!-- Popular Subjects -->
+    <section class="mb-5">
+        <h2 class="section-title mb-4">Popular Subjects</h2>
+        <div class="row g-3">
+            {% for item in subject_data %}
+            <div class="col-md-3 col-sm-6">
+                <a href="{{ url_for('index', subject=item.id) }}" class="text-decoration-none">
+                    <div class="category-card">
+                        <div class="icon-wrapper mb-3">
+                            {% if item.name == 'Mathematics' %}
+                                <i class="fa-solid fa-calculator"></i>
+                            {% elif item.name == 'Physics' %}
+                                <i class="fa-solid fa-atom"></i>
+                            {% elif item.name == 'Chemistry' %}
+                                <i class="fa-solid fa-flask"></i>
+                            {% elif item.name == 'Biology' %}
+                                <i class="fa-solid fa-dna"></i>
+                            {% elif item.name == 'History' %}
+                                <i class="fa-solid fa-hourglass"></i>
+                            {% elif item.name == 'Geography' %}
+                                <i class="fa-solid fa-earth"></i>
+                            {% elif item.name == 'Slovak' %}
+                                <i class="fa-solid fa-language"></i>
+                            {% elif item.name == 'Computer Science' %}
+                                 <i class="fa-solid fa-mouse"></i>
+                            {% elif item.name == 'English' %}
+                                 <i class="fas fa-book-open"></i>
+                            {% elif item.name == 'Economics' %}
+                                <i class="fas fa-dollar"></i>
+                            {% else %}
+                                <i class="fas fa-book"></i> <!-- Default icon -->
+                            {% endif %}
+                        </div>
+                        <h5 class="mb-2">{{ item.name }}</h5>
+                        <p class="text-muted mb-0">{{ item.tutor_count }} Tutors</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <!-- Featured Tutors -->
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title mb-0">Our Tutors</h2>
+            <div class="d-flex gap-2">
+                <select class="form-select" id="sort-tutors">
+                    <option value="rating">Highest Rated</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for tutor in tutors %}
+            <div class="col-md-4 mb-4">
+                <div class="tutor-card">
+                    <div class="card-header">
+                        <img src="{{ url_for('static', filename=tutor.profile_photo) }}" 
+                             class="profile-img" alt="{{ tutor.user.username }}'s profile">
+                        <span class="online-badge">
+                            <i class="fas fa-circle me-1"></i>Online
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0">{{ tutor.user.username }}</h5>
+                            <div class="rating">
+                                <i class="fas fa-star text-warning"></i>
+                                <span>{{ tutor.average_rating }}</span>
+                                <small class="text-muted">({{ tutor.ratings|length }} reviews)</small>
+                            </div>
+                        </div>
+                        <div class="subjects mb-3">
+                            {% for subject in tutor.subjects %}
+                            <span class="subject-badge">{{ subject.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <p class="card-text">{{ tutor.bio[:150] }}...</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">
+                                <span class="text-muted small">Starting at</span>
+                                <br>
+                                <span class="amount">€{{ "%.2f"|format(tutor.hourly_rate) }}/hr</span>
+                            </div>
+                            <a href="{{ url_for('tutor_profile', tutor_id=tutor.id) }}" 
+                               class="btn btn-primary rounded-pill">
+                                View Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-us mb-5">
+        <h2 class="section-title text-center mb-5">Why Choose ZochovaEdu</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper mb-3">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4>Verified Tutors</h4>
+                    <p>All our tutors are thoroughly vetted and qualified to ensure the highest quality of education.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper mb-3">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4>Flexible Scheduling</h4>
+                    <p>Book sessions that fit your schedule with our easy-to-use booking system.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper mb-3">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Satisfaction Guaranteed</h4>
+                    <p>Your satisfaction is our priority. Money-back guarantee if you're not satisfied.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('sort-tutors').addEventListener('change', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('sort', this.value);
+    window.location.search = urlParams.toString();
+});
+</script>
+{% endblock %}
+{% endblock %}

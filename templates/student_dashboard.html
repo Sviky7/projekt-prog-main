@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Dashboard Header -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">My Learning Journey</h2>
+                    <p class="text-muted mb-0">Track your tutoring sessions and progress</p>
+                </div>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Find New Tutor
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="fas fa-calendar-check mb-2"></i>
+                <h3>{{ bookings|selectattr('status', 'equalto', 'confirmed')|list|length }}</h3>
+                <p>Confirmed Sessions</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="fas fa-clock mb-2"></i>
+                <h3>{{ bookings|selectattr('status', 'equalto', 'pending')|list|length }}</h3>
+                <p>Pending Sessions</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card">
+                <i class="fas fa-calendar mb-2"></i>
+                <h3>{{ bookings|length }}</h3>
+                <p>Total Sessions</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Section -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="card-title mb-0">My Sessions</h3>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary active" data-filter="all">All</button>
+                            <button type="button" class="btn btn-outline-primary" data-filter="pending">Pending</button>
+                            <button type="button" class="btn btn-outline-primary" data-filter="confirmed">Confirmed</button>
+                        </div>
+                    </div>
+
+                    {% if bookings %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Tutor</th>
+                                        <th>Subject</th>
+                                        <th>Date & Time</th>
+                                        <th>Duration</th>
+                                        <th>Status</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for booking in bookings %}
+                                    <tr class="booking-row" data-status="{{ booking.status }}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-user-circle fa-2x text-primary me-2"></i>
+                                                <div>
+                                                    <div class="fw-bold">{{ booking.tutor_profile.user.username }}</div>
+                                                    <small class="text-muted">Tutor</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge subject-badge">
+                                                {{ booking.subject.name }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div>{{ booking.date_time.strftime('%Y-%m-%d') }}</div>
+                                            <small class="text-muted">{{ booking.date_time.strftime('%H:%M') }}</small>
+                                        </td>
+                                        <td>{{ booking.duration }} minutes</td>
+                                        <td>
+                                            <span class="badge {% if booking.status == 'confirmed' %}bg-success
+                                                           {% elif booking.status == 'cancelled' %}bg-danger
+                                                           {% else %}bg-warning{% endif %}">
+                                                {{ booking.status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            €{{ "%.2f"|format(booking.tutor_profile.hourly_rate * booking.duration / 60) }}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-book-reader fa-3x text-muted mb-3"></i>
+                            <h5>No Sessions Booked Yet</h5>
+                            <p class="text-muted">Start your learning journey by booking a session with one of our tutors.</p>
+                            <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+                                Find a Tutor
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Booking filter functionality
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const bookingRows = document.querySelectorAll('.booking-row');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // Filter rows
+            const filter = button.dataset.filter;
+            bookingRows.forEach(row => {
+                if (filter === 'all' || row.dataset.status === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
